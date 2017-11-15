@@ -49,58 +49,34 @@ var fromlistPath string
 const startBufSize = 4096
 var maxScanTokenSize int
 
-var chongMaList = [240]string{
-	"䪤" /* 0x875C */, "𣚞" /* 0x877C */, "Ě" /* 0x885C */, "ǖ" /* 0x887C */, "声" /* 0x895C */,
-	"车" /* 0x897C */, "蹾" /* 0x8A5C */, "𡁷" /* 0x8A7C */, "胬" /* 0x8B5C */, "𡃶" /* 0x8B7C */,
-	"𨜏" /* 0x8C5C */, "忂" /* 0x8C7C */, "㙡" /* 0x8D5C */, "挘" /* 0x8D7C */, "笋" /* 0x8E5C */,
-	"糳" /* 0x8E7C */, "蕚" /* 0x8F5C */, "䔖" /* 0x8F7C */, "𪀔" /* 0x905C */, "𣲛" /* 0x907C */,
-	"髢" /* 0x915C */, "𪄴" /* 0x917C */, "𦰡" /* 0x925C */, "諚" /* 0x927C */, "脪" /* 0x935C */,
-	"𢴇" /* 0x937C */, "𠗫" /* 0x945C */, "𤦫" /* 0x947C */, "𦖭" /* 0x955C */, "蠭" /* 0x957C */,
-	"䓀" /* 0x965C */, "𡌂" /* 0x967C */, "珢" /* 0x975C */, "䤵" /* 0x977C */, "娫" /* 0x985C */,
-	"𡟟" /* 0x987C */, "糭" /* 0x995C */, "腖" /* 0x997C */, "䨵" /* 0x9A5C */, "𡯂" /* 0x9A7C */,
-	"鞸" /* 0x9B5C */, "𠍆" /* 0x9B7C */, "㘘" /* 0x9C5C */, "补" /* 0x9C7C */, "𩄼" /* 0x9D5C */,
-	"𠲜" /* 0x9D7C */, "疱" /* 0x9E5C */, "𧿹" /* 0x9E7C */, "髿" /* 0x9F5C */, "鞺" /* 0x9F7C */,
-	"癧" /* 0xA05C */, "捤" /* 0xA07C */, "﹏" /* 0xA15C */, "﹄" /* 0xA17C */, "兝" /* 0xA25C */,
-	"└" /* 0xA27C */, "α" /* 0xA35C */, "ㄍ" /* 0xA37C */, "么" /* 0xA45C */, "弋" /* 0xA47C */,
-	"功" /* 0xA55C */, "四" /* 0xA57C */, "吒" /* 0xA65C */, "帆" /* 0xA67C */, "吭" /* 0xA75C */,
-	"坑" /* 0xA77C */, "沔" /* 0xA85C */, "育" /* 0xA87C */, "坼" /* 0xA95C */, "尚" /* 0xA97C */,
-	"歿" /* 0xAA5C */, "泜" /* 0xAA7C */, "俞" /* 0xAB5C */, "咽" /* 0xAB7C */, "枯" /* 0xAC5C */,
-	"洱" /* 0xAC7C */, "苒" /* 0xAD5C */, "迢" /* 0xAD7C */, "娉" /* 0xAE5C */, "徑" /* 0xAE7C */,
-	"珮" /* 0xAF5C */, "砝" /* 0xAF7C */, "豹" /* 0xB05C */, "院" /* 0xB07C */, "崤" /* 0xB15C */,
-	"悴" /* 0xB17C */, "淚" /* 0xB25C */, "琍" /* 0xB27C */, "許" /* 0xB35C */, "逖" /* 0xB37C */,
-	"廄" /* 0xB45C */, "揉" /* 0xB47C */, "琵" /* 0xB55C */, "稅" /* 0xB57C */, "跚" /* 0xB65C */,
-	"閏" /* 0xB67C */, "愧" /* 0xB75C */, "會" /* 0xB77C */, "稞" /* 0xB85C */, "腮" /* 0xB87C */,
-	"鈾" /* 0xB95C */, "頌" /* 0xB97C */, "暝" /* 0xBA5C */, "漏" /* 0xBA7C */, "蓋" /* 0xBB5C */,
-	"誡" /* 0xBB7C */, "墦" /* 0xBC5C */, "慝" /* 0xBC7C */, "穀" /* 0xBD5C */, "罵" /* 0xBD7C */,
-	"閱" /* 0xBE5C */, "魯" /* 0xBE7C */, "璞" /* 0xBF5C */, "糕" /* 0xBF7C */, "餐" /* 0xC05C */,
-	"嚐" /* 0xC07C */, "縷" /* 0xC15C */, "舉" /* 0xC17C */, "擺" /* 0xC25C */, "甕" /* 0xC27C */,
-	"黠" /* 0xC35C */, "牘" /* 0xC37C */, "孀" /* 0xC45C */, "辮" /* 0xC47C */, "髏" /* 0xC55C */,
-	"疊" /* 0xC57C */, "躡" /* 0xC65C */, "鸛" /* 0xC67C */, "ふ" /* 0xC75C */, "ア" /* 0xC77C */,
-	"ж" /* 0xC85C */, "𠂊" /* 0xC87C */, "尐" /* 0xC95C */, "戉" /* 0xC97C */, "佢" /* 0xCA5C */,
-	"吜" /* 0xCA7C */, "汻" /* 0xCB5C */, "芎" /* 0xCB7C */, "岤" /* 0xCC5C */, "怙" /* 0xCC7C */,
-	"狖" /* 0xCD5C */, "矹" /* 0xCD7C */, "垥" /* 0xCE5C */, "峗" /* 0xCE7C */, "柦" /* 0xCF5C */,
-	"洀" /* 0xCF7C */, "胐" /* 0xD05C */, "苶" /* 0xD07C */, "娖" /* 0xD15C */, "恝" /* 0xD17C */,
-	"涂" /* 0xD25C */, "烡" /* 0xD27C */, "罡" /* 0xD35C */, "茦" /* 0xD37C */, "偅" /* 0xD45C */,
-	"唰" /* 0xD47C */, "惝" /* 0xD55C */, "掤" /* 0xD57C */, "牾" /* 0xD65C */, "痎" /* 0xD67C */,
-	"莍" /* 0xD75C */, "虖" /* 0xD77C */, "傜" /* 0xD85C */, "圌" /* 0xD87C */, "揊" /* 0xD95C */,
-	"斮" /* 0xD97C */, "焮" /* 0xDA5C */, "琰" /* 0xDA7C */, "茻" /* 0xDB5C */, "萆" /* 0xDB7C */,
-	"鄃" /* 0xDC5C */, "隇" /* 0xDC7C */, "幋" /* 0xDD5C */, "搉" /* 0xDD7C */, "滜" /* 0xDE5C */,
-	"煟" /* 0xDE7C */, "綅" /* 0xDF5C */, "腶" /* 0xDF7C */, "赨" /* 0xE05C */, "輋" /* 0xE07C */,
-	"塿" /* 0xE15C */, "嫟" /* 0xE17C */, "槙" /* 0xE25C */, "漒" /* 0xE27C */, "箤" /* 0xE35C */,
-	"翣" /* 0xE37C */, "踊" /* 0xE45C */, "銔" /* 0xE47C */, "嫹" /* 0xE55C */, "憰" /* 0xE57C */,
-	"潿" /* 0xE65C */, "獡" /* 0xE67C */, "蔌" /* 0xE75C */, "蔙" /* 0xE77C */, "醆" /* 0xE85C */,
-	"鋧" /* 0xE87C */, "嬞" /* 0xE95C */, "懁" /* 0xE97C */, "獦" /* 0xEA5C */, "瞣" /* 0xEA7C */,
-	"螏" /* 0xEB5C */, "褟" /* 0xEB7C */, "餤" /* 0xEC5C */, "鮐" /* 0xEC7C */, "燡" /* 0xED5C */,
-	"瞲" /* 0xED7C */, "螰" /* 0xEE5C */, "觲" /* 0xEE7C */, "駹" /* 0xEF5C */, "鴱" /* 0xEF7C */,
-	"礒" /* 0xF05C */, "聵" /* 0xF07C */, "鎪" /* 0xF15C */, "鞫" /* 0xF17C */, "瀙" /* 0xF25C */,
-	"矱" /* 0xF27C */, "酀" /* 0xF35C */, "霬" /* 0xF37C */, "瀵" /* 0xF45C */, "礨" /* 0xF47C */,
-	"騱" /* 0xF55C */, "鶘" /* 0xF57C */, "酅" /* 0xF65C */, "驂" /* 0xF67C */, "贕" /* 0xF75C */,
-	"驏" /* 0xF77C */, "鱋" /* 0xF85C */, "鼶" /* 0xF87C */, "鱭" /* 0xF95C */, "鸓" /* 0xF97C */,
-	"𣘀" /* 0xFA5C */, "𣲙" /* 0xFA7C */, "园" /* 0xFB5C */, "梦" /* 0xFB7C */, "𧃸" /* 0xFC5C */,
-	"憇" /* 0xFC7C */, "檝" /* 0xFD5C */, "𤆤" /* 0xFD7C */, "𠰺" /* 0xFE5C */, "璂" /* 0xFE7C */,
+var chongMaList = [106]string{
+	"声" /* 0x895C */ , "蹾" /* 0x8A5C */ , "胬" /* 0x8B5C */ , "笋" /* 0x8E5C */ , "蕚" /* 0x8F5C */ ,
+	"髢" /* 0x915C */ , "脪" /* 0x935C */ , "䓀" /* 0x965C */ , "珢" /* 0x975C */ , "娫" /* 0x985C */ ,
+	"糭" /* 0x995C */ , "䨵" /* 0x9A5C */ , "鞸" /* 0x9B5C */ , "㘘" /* 0x9C5C */ , "疱" /* 0x9E5C */ ,
+	"髿" /* 0x9F5C */ , "癧" /* 0xA05C */ , "﹏" /* 0xA15C */ , "兝" /* 0xA25C */ , "么" /* 0xA45C */ ,
+	"功" /* 0xA55C */ , "吒" /* 0xA65C */ , "吭" /* 0xA75C */ , "沔" /* 0xA85C */ , "坼" /* 0xA95C */ ,
+	"歿" /* 0xAA5C */ , "俞" /* 0xAB5C */ , "枯" /* 0xAC5C */ , "苒" /* 0xAD5C */ , "娉" /* 0xAE5C */ ,
+	"珮" /* 0xAF5C */ , "豹" /* 0xB05C */ , "崤" /* 0xB15C */ , "淚" /* 0xB25C */ , "許" /* 0xB35C */ ,
+	"廄" /* 0xB45C */ , "琵" /* 0xB55C */ , "跚" /* 0xB65C */ , "愧" /* 0xB75C */ , "稞" /* 0xB85C */ ,
+	"鈾" /* 0xB95C */ , "暝" /* 0xBA5C */ , "蓋" /* 0xBB5C */ , "墦" /* 0xBC5C */ , "穀" /* 0xBD5C */ ,
+	"閱" /* 0xBE5C */ , "璞" /* 0xBF5C */ , "餐" /* 0xC05C */ , "縷" /* 0xC15C */ , "擺" /* 0xC25C */ ,
+	"黠" /* 0xC35C */ , "孀" /* 0xC45C */ , "髏" /* 0xC55C */ , "躡" /* 0xC65C */ , "ふ" /* 0xC75C */ ,
+	"尐" /* 0xC95C */ , "佢" /* 0xCA5C */ , "汻" /* 0xCB5C */ , "岤" /* 0xCC5C */ , "狖" /* 0xCD5C */ ,
+	"垥" /* 0xCE5C */ , "柦" /* 0xCF5C */ , "胐" /* 0xD05C */ , "娖" /* 0xD15C */ , "涂" /* 0xD25C */ ,
+	"罡" /* 0xD35C */ , "偅" /* 0xD45C */ , "惝" /* 0xD55C */ , "牾" /* 0xD65C */ , "莍" /* 0xD75C */ ,
+	"傜" /* 0xD85C */ , "揊" /* 0xD95C */ , "焮" /* 0xDA5C */ , "茻" /* 0xDB5C */ , "鄃" /* 0xDC5C */ ,
+	"幋" /* 0xDD5C */ , "滜" /* 0xDE5C */ , "綅" /* 0xDF5C */ , "赨" /* 0xE05C */ , "塿" /* 0xE15C */ ,
+	"槙" /* 0xE25C */ , "箤" /* 0xE35C */ , "踊" /* 0xE45C */ , "嫹" /* 0xE55C */ , "潿" /* 0xE65C */ ,
+	"蔌" /* 0xE75C */ , "醆" /* 0xE85C */ , "嬞" /* 0xE95C */ , "獦" /* 0xEA5C */ , "螏" /* 0xEB5C */ ,
+	"餤" /* 0xEC5C */ , "燡" /* 0xED5C */ , "螰" /* 0xEE5C */ , "駹" /* 0xEF5C */ , "礒" /* 0xF05C */ ,
+	"鎪" /* 0xF15C */ , "瀙" /* 0xF25C */ , "酀" /* 0xF35C */ , "瀵" /* 0xF45C */ , "騱" /* 0xF55C */ ,
+	"酅" /* 0xF65C */ , "贕" /* 0xF75C */ , "鱋" /* 0xF85C */ , "鱭" /* 0xF95C */ , "园" /* 0xFB5C */ ,
+	"檝" /* 0xFD5C */ ,
 }
 var replaceChongMaSlash bool
 var autoDetect bool
+
+var r *strings.Replacer
 
 func init() {
 	// program args flags
@@ -123,6 +99,15 @@ func init() {
 	flag.StringVar(&fromlistPath, "fromlist", "", "The list specifies the decoder of different files.")
 	flag.BoolVar(&replaceChongMaSlash, "chongMaSlash", false, "Remove slash after chong ma characters. e.g. from 許/ to 許")
 	flag.BoolVar(&autoDetect, "autoDetect", false, "Auto Detect file encoding")
+
+	chongMaReplacePairList := make([]string, 106*2)
+	j := 0
+	for _, chongMa := range chongMaList {
+		chongMaReplacePairList[j] = chongMa + "\\"
+		chongMaReplacePairList[j+1] = chongMa
+		j = j + 2
+	}
+	r = strings.NewReplacer(chongMaReplacePairList...)
 }
 
 func main() {
@@ -156,7 +141,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("The BIG5 To UTF8 executable v1.0 (2017-11-14):")
+	fmt.Println("The BIG5 To UTF8 executable v1.1 (2017-11-15):")
 	fmt.Println("Settings:")
 	fmt.Println("extlist:", extensionWhitelist)
 	fmt.Println("chongMaSlash:", replaceChongMaSlash)
@@ -293,9 +278,7 @@ func toUTF8(bufin *bufio.Reader, bufout *bufio.Writer, transformer *encoding.Dec
 			line = customhtml.UnescapeString(line)
 		}
 		if replaceChongMaSlash {
-			for _, chongMa := range chongMaList {
-				line = strings.Replace(line, chongMa+"\\", chongMa, -1)
-			}
+			line = r.Replace(line)
 		}
 
 		_, err := bufout.WriteString(line)
