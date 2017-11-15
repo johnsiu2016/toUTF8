@@ -141,7 +141,7 @@ func main() {
 		}
 	}
 
-	fmt.Println("The BIG5 To UTF8 executable v1.1 (2017-11-15):")
+	fmt.Println("The BIG5 To UTF8 executable v2.0 (2017-11-15):")
 	fmt.Println("Settings:")
 	fmt.Println("extlist:", extensionWhitelist)
 	fmt.Println("chongMaSlash:", replaceChongMaSlash)
@@ -339,6 +339,7 @@ func check(e error) {
 }
 
 func printUsage() {
+	fmt.Println("The BIG5 To UTF8 executable v2.0 (2017-11-15):")
 	fmt.Println("Readme: https://docs.google.com/document/d/1dZqlYbqmw9tDeVV9DY9M5ctuiAgs1IkMhTD65V_nNgY/edit")
 	fmt.Println()
 	fmt.Println("Usage:")
