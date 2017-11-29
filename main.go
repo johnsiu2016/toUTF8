@@ -343,11 +343,11 @@ func printUsage() {
 	fmt.Println("Readme: https://docs.google.com/document/d/1dZqlYbqmw9tDeVV9DY9M5ctuiAgs1IkMhTD65V_nNgY/edit")
 	fmt.Println()
 	fmt.Println("Usage:")
-	fmt.Println("Input directory:    ./Big5ToUTF8 -dir -in=\"big5files\" [-out=\"utf8files\"] [-from=\"big5\" (default)] [-unstr] [-extlist] [-blacklist=\"blacklist.txt\"] [-skipdirlist=\"skipdirlist.txt\"] [-fromlist=\"fromlist.txt\"]")
-	fmt.Println("Input file          ./Big5ToUTF8 -in=\"cdb_threads\" [-out=\"cdb_threads\"] [-from=\"big5\" (default)] [-unstr]")
+	fmt.Println("Input directory:    ./Big5ToUTF8 -dir -in=\"big5files\" [-out=\"utf8files\"] [-from=\"big5\" (default)] [-unstr] [-extlist] [-blacklist=\"blacklist.txt\"] [-skipdirlist=\"skipdirlist.txt\"] [-fromlist=\"fromlist.txt\"] [-chongMaSlash] [-autoDetect]")
+	fmt.Println("Input file          ./Big5ToUTF8 -in=\"cdb_threads\" [-out=\"cdb_threads\"] [-from=\"big5\" (default)] [-unstr] [-chongMaSlash] [-autoDetect]")
 	fmt.Println("Type Big5ToUTF8 -h for more details")
 	fmt.Println("Examples:")
-	fmt.Println("./Big5ToUTF8 -dir -in=\"big5files\" -unstr (&#xxxx to char)")
+	fmt.Println("./Big5ToUTF8 -dir -in=\"big5files\" -unstr (&#xxxx to char) (skip &#9 &#10; &#13; &#33;)")
 	fmt.Println("./Big5ToUTF8 -in=\"cdb_threads.txt\"")
 }
 
